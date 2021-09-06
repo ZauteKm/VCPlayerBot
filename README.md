@@ -36,11 +36,11 @@
 - `API_ID` : Get from [my.telegram.org](https://my.telegram.org/app) or [@UseTGzKBot](https://telegram.dog/UseTGzKBot)
 - `API_HASH` : Get from [my.telegram.org](https://my.telegram.org/app) or [@UseTGzKBot](https://telegram.dog/UseTGzKBot)
 - `BOT_TOKEN` : Get From [@Botfather](https://telegram.dog/BotFather)
+- `BOT_USERNAME` : Your Telegram Bot Username, get it from @Botfather XD
 - `SESSION_STRING` : Generate From here [![GenerateStringName](https://img.shields.io/badge/repl.it-generateStringName-yellowgreen)](https://replit.com/@ZauteKm/GenerateStringSession)
 - `CHAT_ID` : ID of Channel/Group where the bot will works or stream videos.
 - `AUTH_USERS` : ID of Users who can use Admins commands (for multiple users seperated by space).
 - `REPLY_MESSAGE` : A reply to those who message the USER account in PM. Leave it blank if you do not need this feature. 
-- `BOT_USERNAME` : Your Telegram Bot Username, get it from @Botfather XD
 
 </details>
 
