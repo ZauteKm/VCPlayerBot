@@ -1,6 +1,6 @@
 # Telegram vcVideoPlayer
 
-- An Telegram Bot By [@AsmSafone](https://t.me/AsmSafone) To Stream Videos in Telegram Voice Chat.
+- An Telegram Bot By [@ZauteKm](https://t.me/ZauteKm) To Stream Videos in Telegram Voice Chat.
 
 ---
 
