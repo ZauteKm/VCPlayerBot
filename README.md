@@ -99,7 +99,7 @@ $ python3 main.py
 - Python 3.6 or Higher.
 - [Telegram API key](https://docs.pyrogram.org/intro/quickstart#enjoy-the-api).
 - Latest [FFmpeg Python](https://www.ffmpeg.org/).
-- Pyrogram [String Session](http://t.me/genStr_robot) of the account.
+- Pyrogram [String Session](https://replit.com/@ZauteKm/GenerateStringSession) of the account.
 - The User Account Needs To Be An Admin In The Channel/Group.
 
 ---
