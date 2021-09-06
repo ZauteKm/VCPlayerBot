@@ -6,7 +6,7 @@
 
 ## NOTE:
 
-- Make sure you have started a VoiceChat in your Group before deploying.
+- Make sure you have started a VoiceChat in your Group/Channel before deploying.
 
 ---
 
