@@ -39,10 +39,10 @@ HELP_TEXT = """
 
 🏷️ **Admin Only Commands:**
 
-\u2022 `/stream` - Start streaming the video.
-\u2022 `/mute` - Mute the user in voice chat.
-\u2022 `/unmute` - Unmute the user in voice chat.
-\u2022 `/endstream` - End current stream & Left VC.
+\u2022 `/stream` - Start streaming the Video.
+\u2022 `/radio` - Start streaming the Radio.
+\u2022 `/stopradio` - Stop streaming the Radio.
+\u2022 `/endstream` - Stop streaming the Video.
 """
 
 
