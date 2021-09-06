@@ -1,4 +1,52 @@
-# vcVideoPlayer
+# Telegram vcVideoPlayer
+
+- An Telegram Bot By [@AsmSafone](https://t.me/AsmSafone) To Stream Videos in Telegram Voice Chat.
+
+---
+
+## NOTE:
+
+- Make sure you have started a VoiceChat in your Group before deploying.
+
+---
+
+## Features
+
+<details>
+  <summary><b>Show the Features</b></summary>
+<br/>
+
+- Supports Live Streaming
+- Supports YouTube Streaming
+- Supports Live Radio Streaming
+- Supports Video Files Streaming
+- Supports YouTube Live Streaming
+- Customizable Userbot Protection (PM Guard)
+
+</details>
+
+---
+
+## Variables
+<details>
+  <summary><b>See Variables</b></summary>
+<br/>
+
+<b>Pre Requisites (Config Vars)</b>
+- `API_ID` : Get from [my.telegram.org](https://my.telegram.org/app) or [@UsetTGzKBot](https://telegram.dog/UseTGzKBot)
+- `API_HASH` : Get from [my.telegram.org](https://my.telegram.org/app) or [@UseTGzKBot](https://telegram.dog/UseTGzKBot)
+- `BOT_TOKEN` : Get From [@Botfather](https://telegram.dog/BotFather)
+- `SESSION_STRING` : Generate From here [![GenerateStringName](https://img.shields.io/badge/repl.it-generateStringName-yellowgreen)](https://replit.com/@ZauteKm/GenerateStringSession)
+- `CHAT` : ID of Channel/Group where the bot plays Music.
+- `LOG_GROUP` : Group to send Playlist, if CHAT is a Group
+- `ADMINS` : ID of users who can use admin commands.
+- `ARQ_API` : Get it for free from [@ARQRobot](https://telegram.dog/ARQRobot), This is required for /dplay to work.
+- `STREAM_URL` : Stream URL of radio station or a youtube live video to stream when the bot starts or with /radio command. Some Streaming Links [Click here.](https://t.me/c/1481808444/143)
+- `MAXIMUM_DURATION` : Maximum duration of song to play.(Optional)
+- `REPLY_MESSAGE` : A reply to those who message the USER account in PM. Leave it blank if you do not need this feature. 
+- `ADMIN_ONLY` : Pass `Y` If you want to make /play and /dplay commands only for admins of `CHAT`. By default `N` /play and /dplay is available for all.
+
+</details>
 
 ---
 
@@ -20,7 +68,7 @@
 <p align="left">
 <a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FZauteKm%2FvcVideoPlayer&envs=API_ID%2CAPI_HASH%2CBOT_TOKEN%2CSESSION_STRING%2CCHAT_ID%2CAUTH_USERS%2CBOT_USERNAME%2CREPLY_MESSAGE&optionalEnvs=REPLY_MESSAGE&API_IDDesc=User+Account+Telegram+API_ID+get+it+from+my.telegram.org%2Fapps&API_HASHDesc=User+Account+Telegram+API_HASH+get+it+from+my.telegram.org%2Fapps&BOT_TOKENDesc=Your+Telegram+Bot+Token%2C+get+it+from+%40Botfather+XD&SESSION_STRINGDesc=Pyrogram+Session+String+of+User+Account%2C+get+it+from+%4https://replit.com/@ZauteKm/GenerateStringSession&CHAT_IDDesc=ID+of+your+Channel+or+Group+where+the+bot+will+works+or+stream+videos&AUTH_USERSDesc=ID+of+Auth+Users+who+can+use+Admin+commands+%28for+multiple+users+seperated+by+space%29&BOT_USERNAMEDesc=Your+Telegram+Bot+Username+without+%40%2C+get+it+from+%40Botfather+XD&REPLY_MESSAGEDesc=A+reply+message+to+those+who+message+the+USER+account+in+PM.+Make+it+blank+if+you+do+not+need+this+feature.&REPLY_MESSAGEDefault=Hello+Sir%2C+I%27m+a+bot+to+stream+videos+on+telegram+voice+chat%2C+not+having+time+to+chat+with+you+%F0%9F%98%82%21&referralCode=,ZAUTEKM"
 ">
-     <img height="30px" src="https://img.shields.io/badge/Deploy%20to%20Railway-blueviolet?style=for-the-badge&logo=railway">
+     <img height="30px" src="https://railway.app/button.svg">
   </a>
 </p>
 
@@ -44,3 +92,34 @@ $ python3 main.py
 ```
 
 </details>
+
+---
+
+## Requirements
+- Python 3.6 or Higher.
+- [Telegram API key](https://docs.pyrogram.org/intro/quickstart#enjoy-the-api).
+- Latest [FFmpeg Python](https://www.ffmpeg.org/).
+- Pyrogram [String Session](http://t.me/genStr_robot) of the account.
+- The User Account Needs To Be An Admin In The Channel/Group.
+
+---
+
+## License
+```sh
+vcVideoPlayer, Telegram Video Chat Bot
+Copyright (c) 2021 Zaute Km
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>
+```
+
