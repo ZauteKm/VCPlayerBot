@@ -174,7 +174,7 @@ async def stream(client, m: Message):
                 await group_call.join(CHAT_ID)
                 await group_call.start_video(video, with_audio=True, repeat=False)
                 VIDEO_CALL[CHAT_ID] = group_call
-                await msg.edit(f"▶️ **Started [Video Streaming](https://t.me/AsmSafone) !**", disable_web_page_preview=True)
+                await msg.edit(f"▶️ **Started [Video Streaming](https://t.me/ZauteKm) !**", disable_web_page_preview=True)
             except Exception as e:
                 await msg.edit(f"❌ **An Error Occoured !** \n\nError: `{e}`")
         else:
