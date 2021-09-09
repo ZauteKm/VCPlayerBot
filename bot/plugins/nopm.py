@@ -20,7 +20,7 @@ import asyncio
 from config import Config
 from pyrogram import Client, filters
 from pyrogram.errors import BotInlineDisabled
-from bot.safone.extras import USERNAME
+from bot.plugins.extras import USERNAME
 
 ADMINS = Config.ADMINS
 REPLY_MESSAGE = Config.REPLY_MESSAGE
