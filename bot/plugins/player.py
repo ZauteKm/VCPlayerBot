@@ -26,8 +26,8 @@ import subprocess
 from signal import SIGINT
 from asyncio import sleep
 from config import Config, db
-from bot.safone.nopm import User
-from bot.safone.extras import USERNAME
+from bot.plugins.nopm import User
+from bot.plugins.extras import USERNAME
 from youtube_dl import YoutubeDL
 from pyrogram import Client, filters
 from pyrogram.types import Message
