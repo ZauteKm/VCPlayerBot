@@ -17,13 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import asyncio
+from config import Config
+from pyrogram import Client, errors
 from pyrogram.handlers import InlineQueryHandler
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram import Client, errors
-from config import Config
 from youtubesearchpython import VideosSearch
 
-USERNAME = Config.BOT_USERNAME
 REPLY_MESSAGE = Config.REPLY_MESSAGE
 
 buttons = [
@@ -43,7 +42,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy Own Video Player Bot",
-                input_message_content=InputTextMessageContent(f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@AsmSafone | @SafoTheBot 👑</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@ZauteKm | @tgbotsproject 👑</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )
@@ -54,7 +53,7 @@ async def search(client, query):
         await client.answer_inline_query(
             query.id,
             results=answers,
-            switch_pm_text=("Search a YouTube Videos"),
+            switch_pm_text=("Search a YouTube Videos!"),
             switch_pm_parameter="help",
             cache_time=0
         )
