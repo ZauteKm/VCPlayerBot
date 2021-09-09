@@ -19,8 +19,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import asyncio
 from config import Config
 from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from pyrogram.types import Message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import MessageNotModified
+from bot.plugins.extras import USERNAME
 
 CHAT_ID = Config.CHAT_ID
 USERNAME = Config.BOT_USERNAME
