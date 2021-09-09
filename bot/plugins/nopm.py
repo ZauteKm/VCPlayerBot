@@ -17,12 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import asyncio
-from pyrogram import Client, filters
 from config import Config
+from pyrogram import Client, filters
 from pyrogram.errors import BotInlineDisabled
+from bot.safone.extras import USERNAME
 
 ADMINS = Config.ADMINS
-USERNAME = Config.BOT_USERNAME
 REPLY_MESSAGE = Config.REPLY_MESSAGE
 
 User = Client(
@@ -35,7 +35,7 @@ User = Client(
 async def nopm(client, message):
     if REPLY_MESSAGE is not None:
         try:
-            inline = await client.get_inline_bot_results(USERNAME, "ZAUTE_KM")
+            inline = await client.get_inline_bot_results(USERNAME, "ZAUTE_KM)
             await client.send_inline_bot_result(
                 message.chat.id,
                 query_id=inline.query_id,
@@ -45,7 +45,7 @@ async def nopm(client, message):
         except BotInlineDisabled:
             for admin in ADMINS:
                 try:
-                    await client.send_message(chat_id=admin, text=f"Hey 🙋‍♂️,\nInline Mode Isn't Enabled For @{USERNAME} Yet. A Nibba Is Spaming Me In PM, Enable Inline Mode For @{USERNAME} From @Botfather To Reply Him!")
+                    await client.send_message(chat_id=admin, text=f"Hey 🙋‍♂️,\nInline Mode Isn't Enabled For @{USERNAME} Yet. A Nibba Is Spaming Me In PM, Enable Inline Mode For @{USERNAME} From @Botfather To Reply Him 😉!")
                 except Exception as e:
                     print(e)
                     pass
