@@ -41,10 +41,10 @@ HELP_TEXT = """
 
 🏷️ **Admin Only Commands:**
 
-\u2022 `/stream` - Start streaming the Video.
 \u2022 `/radio` - Start streaming the Radio.
-\u2022 `/stopradio` - Stop streaming the Radio.
+\u2022 `/stream` - Start streaming the Video.
 \u2022 `/endstream` - Stop streaming the Video.
+\u2022 `/restart` - Restart the bot (Owner Only).
 """
 
 
@@ -75,6 +75,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data=="home":
         buttons = [
+            [
+                InlineKeyboardButton("🔎 Search YouTube Videos 🔍", switch_inline_query_current_chat=""),
+            ],
             [
                 InlineKeyboardButton("🗣️ Feedback", url="https://t.me/zautebot"),
                 InlineKeyboardButton("Channel 📢", url="https://t.me/tgbotsproject"),
@@ -107,6 +110,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
 @Client.on_message(filters.command(["start", f"start@{USERNAME}"]) & (filters.chat(CHAT_ID) | filters.private))
 async def start(client, message):
     buttons = [
+            [
+                InlineKeyboardButton("🔍 Search YouTube Videos 🔍", switch_inline_query_current_chat=""),
+            ],
             [
                 InlineKeyboardButton("🗣️ Feedback", url="https://t.me/zautebot"),
                 InlineKeyboardButton("Channel 📢", url="https://t.me/tgbotsproject"),
