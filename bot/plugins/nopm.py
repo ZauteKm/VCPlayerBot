@@ -35,7 +35,7 @@ User = Client(
 async def nopm(client, message):
     if REPLY_MESSAGE is not None:
         try:
-            inline = await client.get_inline_bot_results(USERNAME, "ZAUTE_KM)
+            inline = await client.get_inline_bot_results(USERNAME, "ZAUTE_KM")
             await client.send_inline_bot_result(
                 message.chat.id,
                 query_id=inline.query_id,
