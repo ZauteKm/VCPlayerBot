@@ -1,20 +1,17 @@
-"""
-vcVideoPlayer, Telegram Video Chat Bot
-Copyright (c) 2021  Zaute Km
+#!/usr/bin/env python3
+# Copyright (C) @zautekm
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>
-"""
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import re
@@ -29,7 +26,7 @@ if match:
     YSTREAM=True
     finalurl=STREAM
     LOGGER.warning("YouTube Stream is set as STARTUP STREAM")
-elif STREAM.startswith("https://t.me/DumpPlaylist"):
+elif STREAM.startswith("https://t.me/YTPlayListData"):
     try:
         msg_id=STREAM.split("/", 4)[4]
         finalurl=int(msg_id)
@@ -90,6 +87,7 @@ class Config:
     STREAM_END={}
     CALL_STATUS=False
     PAUSE=False
+    STREAM_LINK=False
     HELP="""
 <b>How Can I Play Video?</b>
 
@@ -130,15 +128,17 @@ These are commands to control player.
     Command: <b>/clearplaylist</b>
 
 <b>How Can I Export My Current Playlist?</b>
- 1. Command: <b>export</b>
-    <i>To export current playlist for future use.
+ 1. Command: <b>/export</b>
+    <i>To export current playlist for future use.</i>
 
 <b>Other Commands</b>
  1. Update and restert the bot.
-    Command: <b>update</b> or <b>/restart</b>
+    Command: <b>/update</b> or <b>/restart</b>
+ 2. Get Logs
+    Command: <b>/logs</b>
 
 <b>How Can I Stream In My Group</b>
-  <i>The source code of this bot is public and can be found at <a href=https://github.com/subinps/VCPlayerBot>VCPlayerBot.</a>\nYou can deploy your own bot and use in your group.</i>
+  <i>The source code of this bot is public and can be found at <a href=https://github.com/ZauteKm/VCVideoPlayBot>VCVideoPlayBot.</a>\nYou can deploy your own bot and use in your group.</i>
 
 """
 
