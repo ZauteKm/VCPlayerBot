@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+# Copyright (C) @zautekm
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pytgcalls.types.input_stream import InputAudioStream, InputVideoStream, AudioParameters, VideoParameters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pyrogram.raw.functions.phone import EditGroupCallTitle, CreateGroupCall
@@ -25,6 +40,8 @@ import json
 import time
 import sys
 import os
+import math
+import asyncio
 
 async def play():
     song=Config.playlist[0]    
@@ -41,6 +58,8 @@ async def play():
         return False
     audio_file, video_file, width, height = await get_raw_files(file)
     await sleep(1)
+    if Config.STREAM_LINK:
+        Config.STREAM_LINK=False
     await join_call(audio_file, video_file, width, height)
 
 async def get_link(file):
@@ -57,13 +76,16 @@ async def get_link(file):
                 url=s.url
                 continue
     except Exception as e:
-        LOGGER.error(e)
+        LOGGER.error(f"Errors occured while getting link from youtube video {e}")
         await skip()
         return False
     return url
 
 async def skip():
-    if not Config.playlist:
+    if Config.STREAM_LINK and len(Config.playlist) == 0:
+        await stream_from_link()
+        return
+    elif not Config.playlist:
         await start_stream()
         return
     old_track = Config.playlist.pop(0)
@@ -111,11 +133,21 @@ async def restart():
         return
     await download(Config.playlist[1])
 
-async def download(song):
+async def restart_playout():
+    if not Config.playlist:
+        await start_stream()
+        return
+    LOGGER.warning(f"RESTART PLAYING: {Config.playlist[0][1]}")
+    await play()
+    if len(Config.playlist) <= 1:
+        return
+    await download(Config.playlist[1])
+
+async def download(song, msg=None):
     if song[3] == "telegram":
         if not Config.GET_FILE.get(song[5]):
-            try:
-                original_file = await bot.download_media(song[2])
+            try: 
+                original_file = await bot.download_media(song[2], progress=progress_bar, progress_args=(int((song[5].split("_"))[1]), time.time(), msg))
                 Config.GET_FILE[song[5]]=original_file
             except Exception as e:
                 LOGGER.error(e)
@@ -142,6 +174,7 @@ async def stream_from_link(link):
     raw_audio, raw_video, width, height = await get_raw_files(link)
     if Config.playlist:
         Config.playlist.clear()
+    Config.STREAM_LINK=link
     await join_call(raw_audio, raw_video, width, height)
 
 async def get_raw_files(link):
@@ -152,7 +185,7 @@ async def get_raw_files(link):
         except subprocess.TimeoutExpired:
             process.kill()
         except Exception as e:
-            LOGGER.error(e)
+            LOGGER.error(f"Error while converting to raw files {e}")
             pass
         del Config.FFMPEG_PROCESSES[Config.CHAT]
     Config.GET_FILE["old"] = os.listdir("./downloads")
@@ -186,20 +219,21 @@ async def edit_title():
         title = "Live Stream"
     else:       
         title = Config.playlist[0][1]
-    chat = await USER.resolve_peer(Config.CHAT)
-    full_chat=await USER.send(
-        GetFullChannel(
-            channel=InputChannel(
-                channel_id=chat.channel_id,
-                access_hash=chat.access_hash,
-                ),
-            ),
-        )
-    edit = EditGroupCallTitle(call=full_chat.full_chat.call, title=title)
+    
     try:
+        chat = await USER.resolve_peer(Config.CHAT)
+        full_chat=await USER.send(
+            GetFullChannel(
+                channel=InputChannel(
+                    channel_id=chat.channel_id,
+                    access_hash=chat.access_hash,
+                    ),
+                ),
+            )
+        edit = EditGroupCallTitle(call=full_chat.full_chat.call, title=title)
         await USER.send(edit)
     except Exception as e:
-        LOGGER.error("Errors Occured while editing title", e)
+        LOGGER.error(f"Errors Occured while editing title - {e}")
         pass
 
 
@@ -225,19 +259,21 @@ async def join_call(audio, video, width, height):
         not os.path.exists(video):
         await skip()
     if Config.CALL_STATUS:
-        al = group_call.active_calls
-        if al and Config.CHAT in [t.chat_id for t in al]:
-            play=await change_file(audio, video, width, height)
-        else:
-            play=await join_and_play(audio, video, width, height)
+        play=await change_file(audio, video, width, height)
     else:
         play=await join_and_play(audio, video, width, height)
     if play == False:
         await sleep(1)
         await join_call(audio, video, width, height)
-    await sleep(2)
-    al = group_call.active_calls
-    if not Config.CHAT in [t.chat_id for t in al]:
+    await sleep(1)
+    try:
+        call=group_call.get_call(Config.CHAT)
+    except GroupCallNotFound:
+        return await restart()
+    except Exception as e:
+        LOGGER.warning(e)
+        return await restart()
+    if str(call.status) != "playing":
         await restart()
     else:
         old=Config.GET_FILE.get("old")
@@ -309,7 +345,7 @@ async def join_and_play(audio, video, width, height):
                 )
                 )
             await sleep(2)
-            await restart()
+            await restart_playout()
         except Exception as e:
             LOGGER.error(f"Unable to start new GroupCall :- {e}")
             pass
@@ -331,8 +367,10 @@ async def leave_call():
     try:
         await group_call.leave_group_call(Config.CHAT)
     except Exception as e:
-        LOGGER.error(e)
+        LOGGER.error(f"Errors while leaving call {e}")
     Config.playlist.clear()
+    if Config.STREAM_LINK:
+        Config.STREAM_LINK=False
     Config.CALL_STATUS=False
 
 async def pause():
@@ -340,7 +378,10 @@ async def pause():
         await group_call.pause_stream(Config.CHAT)
         return True
     except GroupCallNotFound:
-        await restart()
+        await restart_playout()
+        return False
+    except Exception as e:
+        LOGGER.error(f"Errors Occured while pausing -{e}")
         return False
 
 async def resume():
@@ -348,15 +389,21 @@ async def resume():
         await group_call.resume_stream(Config.CHAT)
         return True
     except GroupCallNotFound:
-        await restart()
+        await restart_playout()
         return False
+    except Exception as e:
+        LOGGER.error(f"Errors Occured while resuming -{e}")
+        return False
+    
 
 
 async def volume(volume):
     try:
         await group_call.change_volume_call(Config.CHAT, volume)
     except BadRequest:
-        await restart()
+        await restart_playout()
+    except Exception as e:
+        LOGGER.error(f"Errors Occured while changing volume Error -{e}")
     
 
 async def shuffle_playlist():
@@ -420,7 +467,7 @@ async def get_height_and_width(file):
 
 async def y_play(playlist):
     try:
-        getplaylist=await bot.get_messages("DumpPlaylist", int(playlist))
+        getplaylist=await bot.get_messages("YTPlayListData", int(playlist))
         playlistfile = await getplaylist.download()
         LOGGER.warning("Trying to get details from playlist.")
         n=await import_play_list(playlistfile)
@@ -508,6 +555,51 @@ async def get_buttons():
             )
     return reply_markup
 
+async def progress_bar(current, zero, total, start, msg):
+    now = time.time()
+    if total == 0:
+        return
+    if round((now - start) % 3) == 0 or current == total:
+        speed = current / (now - start)
+        percentage = current * 100 / total
+        time_to_complete = round(((total - current) / speed)) * 1000
+        time_to_complete = TimeFormatter(time_to_complete)
+        progressbar = "[{0}{1}]".format(\
+            ''.join(["▰" for i in range(math.floor(percentage / 5))]),
+            ''.join(["▱" for i in range(20 - math.floor(percentage / 5))])
+            )
+        current_message = f"**Downloading** {round(percentage, 2)}% \n{progressbar}\n⚡️ **Speed**: {humanbytes(speed)}/s\n⬇️ **Downloaded**: {humanbytes(current)} / {humanbytes(total)}\n🕰 **Time Left**: {time_to_complete}"
+        if msg:
+            try:
+                await msg.edit(text=current_message)
+            except:
+                pass
+        LOGGER.warning(current_message)
+
+
+def humanbytes(size):
+    if not size:
+        return ""
+    power = 2**10
+    n = 0
+    Dic_powerN = {0: ' ', 1: 'K', 2: 'M', 3: 'G', 4: 'T'}
+    while size > power:
+        size /= power
+        n += 1
+    return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
+
+
+def TimeFormatter(milliseconds: int) -> str:
+    seconds, milliseconds = divmod(int(milliseconds), 1000)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+    tmp = ((str(days) + " days, ") if days else "") + \
+        ((str(hours) + " hours, ") if hours else "") + \
+        ((str(minutes) + " min, ") if minutes else "") + \
+        ((str(seconds) + " sec, ") if seconds else "") + \
+        ((str(milliseconds) + " millisec, ") if milliseconds else "")
+    return tmp[:-2]
 
 def get_pause(status):
     if status == True:
@@ -547,11 +639,13 @@ async def handler(client: PyTgCalls, update: Update):
     if str(update) == "STREAM_AUDIO_ENDED" or str(update) == "STREAM_VIDEO_ENDED":
         if not Config.STREAM_END.get("STATUS"):
             Config.STREAM_END["STATUS"]=str(update)
-            if not Config.playlist:
+            if Config.STREAM_LINK and len(Config.playlist) == 0:
+                await stream_from_link(Config.STREAM_LINK)
+            elif not Config.playlist:
                 await start_stream()
             else:
                 await skip()          
-            await sleep(15) #wait for max 10 sec
+            await sleep(15) #wait for max 15 sec
             try:
                 del Config.STREAM_END["STATUS"]
             except:
