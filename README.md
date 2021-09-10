@@ -1,4 +1,4 @@
-# Telegram vcVideoPlayer
+# Telegram VCVideoPlayBot
 
 - An Telegram Bot By [@ZauteKm](https://t.me/ZauteKm) To Stream Videos in Telegram Voice Chat.
 
@@ -16,12 +16,15 @@
   <summary><b>Show the Features</b></summary>
 <br/>
 
-- Supports Live Streaming
-- Supports YouTube Streaming
-- Supports Live Radio Streaming
-- Supports Video Files Streaming
-- Supports YouTube Live Streaming
-- Customizable Userbot Protection (PM Guard)
+- Playlist, queue.
+- Supports Play from Youtube Playlist.
+- Change VoiceChat title to current playing song name.
+- Supports Live streaming from youtube
+- Play from telegram file supported.
+- Starts Radio after if no songs in playlist.
+- Automatically downloads audio for the first two tracks in the playlist to ensure smooth playing
+- Automatic restart even if heroku restarts.
+- Support exporting and importing playlist.
 
 </details>
 
@@ -36,9 +39,10 @@
 1. `API_ID` : Get From [my.telegram.org](https://my.telegram.org/)
 2. `API_HASH` : Get from [my.telegram.org](https://my.telegram.org)
 3. `BOT_TOKEN` : [@Botfather](https://telegram.dog/BotFather)
-4. `SESSION_STRING` : Generate From here [![GenerateStringName](https://img.shields.io/badge/repl.it-generateStringName-yellowgreen)](https://repl.it/@subinps/getStringName)
+4. `SESSION_STRING` : Generate From here [![GenerateStringName](https://img.shields.io/badge/repl.it-generateStringName-yellowgreen)](https://replit.com/@ZauteKm/GenerateStringSession)
 5. `CHAT` : ID of Channel/Group where the bot plays Music.
-Optional Vars
+
+<b>Optional Vars</b>
 1. `LOG_GROUP` : Group to send Playlist, if CHAT is a Group()
 2. `ADMINS` : ID of users who can use admin commands.
 3. `STARTUP_STREAM` : This will be streamed on startups and restarts of bot. You can use either any STREAM_URL or a direct link of any video or a Youtube Live link. You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://telegram.dog/DumpPlaylist) or get a PlayList from [PlayList Extract](https://telegram.dog/GetAPlaylistbot). The PlayList link should in form `https://t.me/DumpPlaylist/xxx`.
@@ -65,7 +69,7 @@ Optional Vars
 <br/>
 
 <p align="left">
-<a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FZauteKm%2FvcVideoPlayer&envs=API_ID%2CAPI_HASH%2CBOT_TOKEN%2CSESSION_STRING%2CCHAT_ID%2CAUTH_USERS%2CBOT_USERNAME%2CREPLY_MESSAGE&optionalEnvs=REPLY_MESSAGE&API_IDDesc=User+Account+Telegram+API_ID+get+it+from+my.telegram.org%2Fapps&API_HASHDesc=User+Account+Telegram+API_HASH+get+it+from+my.telegram.org%2Fapps&BOT_TOKENDesc=Your+Telegram+Bot+Token%2C+get+it+from+%40Botfather+XD&SESSION_STRINGDesc=Pyrogram+Session+String+of+User+Account%2C+get+it+from+%4https://replit.com/@ZauteKm/GenerateStringSession&CHAT_IDDesc=ID+of+your+Channel+or+Group+where+the+bot+will+works+or+stream+videos&AUTH_USERSDesc=ID+of+Auth+Users+who+can+use+Admin+commands+%28for+multiple+users+seperated+by+space%29&BOT_USERNAMEDesc=Your+Telegram+Bot+Username+without+%40%2C+get+it+from+%40Botfather+XD&REPLY_MESSAGEDesc=A+reply+message+to+those+who+message+the+USER+account+in+PM.+Make+it+blank+if+you+do+not+need+this+feature.&REPLY_MESSAGEDefault=Hello+Sir%2C+I%27m+a+bot+to+stream+videos+on+telegram+voice+chat%2C+not+having+time+to+chat+with+you+%F0%9F%98%82%21&referralCode=,ZAUTEKM"
+<a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FZauteKm%2FVCVideoPlayBot"
 ">
      <img height="30px" src="https://railway.app/button.svg">
   </a>
@@ -81,8 +85,8 @@ Optional Vars
 <br/>
 
 ```sh
-$ git clone https://github.com/ZauteKm/vcVideoPlayer.git
-$ cd vcVideoPlayer
+$ git clone https://github.com/ZauteKm/VCVideoPlayBot.git
+$ cd VCVideoPlayBot
 $ sudo apt-get install python3-pip ffmpeg
 $ pip3 install -U pip
 $ pip3 install -U -r requirements.txt
@@ -102,23 +106,3 @@ $ python3 main.py
 - The User Account Needs To Be An Admin In The Channel/Group.
 
 ---
-
-## License
-```sh
-vcVideoPlayer, Telegram Video Chat Bot
-Copyright (c) 2021 Zaute Km
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>
-```
-
