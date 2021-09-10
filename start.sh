@@ -1,7 +1,6 @@
-echo "Fetching Upstream Repo ..."
-git clone https://github.com/ZauteKm/vcVideoPlayer.git /vcVideoPlayer
+echo "Cloning Repo...."
+git clone https://github.com/ZauteKm/vcVideoPlayer /vcVideoPlayer
 cd /vcVideoPlayer
-echo "Installing Requirements ..."
 pip3 install -U -r requirements.txt
-echo "Starting Bot, Please Wait ..."
-python3 -m bot
+echo "Starting Bot...."
+python3 main.py
