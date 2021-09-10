@@ -31,13 +31,14 @@
 <details>
   <summary><b>See Variables</b></summary>
 <br/>
+
 <b>Mandatory Vars</b>
 1. `API_ID` : Get From [my.telegram.org](https://my.telegram.org/)
 2. `API_HASH` : Get from [my.telegram.org](https://my.telegram.org)
 3. `BOT_TOKEN` : [@Botfather](https://telegram.dog/BotFather)
 4. `SESSION_STRING` : Generate From here [![GenerateStringName](https://img.shields.io/badge/repl.it-generateStringName-yellowgreen)](https://repl.it/@subinps/getStringName)
 5. `CHAT` : ID of Channel/Group where the bot plays Music.
-### Optional Vars
+Optional Vars
 1. `LOG_GROUP` : Group to send Playlist, if CHAT is a Group()
 2. `ADMINS` : ID of users who can use admin commands.
 3. `STARTUP_STREAM` : This will be streamed on startups and restarts of bot. You can use either any STREAM_URL or a direct link of any video or a Youtube Live link. You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://telegram.dog/DumpPlaylist) or get a PlayList from [PlayList Extract](https://telegram.dog/GetAPlaylistbot). The PlayList link should in form `https://t.me/DumpPlaylist/xxx`.
