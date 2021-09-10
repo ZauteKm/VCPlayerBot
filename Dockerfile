@@ -1,22 +1,15 @@
-# Python Based Docker
-FROM python:latest
+FROM debian:latest
 
-# Installing Packages
 RUN apt update && apt upgrade -y
 RUN apt install git curl python3-pip ffmpeg -y
-
-# Updating Pip
 RUN pip3 install -U pip
-
-# Copying Requirements
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs && \
+    npm i -g npm
 COPY requirements.txt /requirements.txt
-
-# Installing Requirements
 RUN cd /
 RUN pip3 install -U -r requirements.txt
 RUN mkdir /vcVideoPlayer
 WORKDIR /vcVideoPlayer
 COPY start.sh /start.sh
-
-# Running Video Player Bot
 CMD ["/bin/bash", "/start.sh"]
