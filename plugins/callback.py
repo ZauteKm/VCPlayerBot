@@ -1,4 +1,19 @@
-from utils import get_admins, get_buttons, get_playlist_str, pause, restart, resume, shuffle_playlist, skip
+#!/usr/bin/env python3
+# Copyright (C) @subinps
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from utils import get_admins, get_buttons, get_playlist_str, pause, restart_playout, resume, shuffle_playlist, skip
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors import MessageNotModified
 from pyrogram import Client
@@ -80,7 +95,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not Config.playlist:
             await query.answer("No songs in playlist", show_alert=True)
         else:
-            await restart()
+            await restart_playout()
             await sleep(1)
         pl=await get_playlist_str()
         try:
@@ -95,7 +110,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         buttons = [
             [
                 InlineKeyboardButton('📢 Channel', url='https://t.me/tgbotsproject'),
-                InlineKeyboardButton('Source 🔥', url='https://github.com/ZauteKm/vcVideoPlayer'),
+                InlineKeyboardButton('Source 🔥', url='https://github.com/ZauteKm/VCVideoPlayBot'),
             ]
         ]
         reply_markup = InlineKeyboardMarkup(buttons)
