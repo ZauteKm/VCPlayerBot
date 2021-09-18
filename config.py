@@ -12,21 +12,31 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-import os
-import re
 from logger import LOGGER
+try:
+   import os
+   import re
+   import heroku3
+
+except ModuleNotFoundError:
+    import os
+    import sys
+    import subprocess
+    file=os.path.abspath("requirements.txt")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
+    os.execl(sys.executable, sys.executable, *sys.argv)
+
 
 Y_PLAY=False
 YSTREAM=False
 STREAM=os.environ.get("STARTUP_STREAM", "https://www.youtube.com/watch?v=zcrUCvBD16k")
-regex = r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+"
+regex = r"^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"
 match = re.match(regex,STREAM)
 if match:
     YSTREAM=True
     finalurl=STREAM
     LOGGER.warning("YouTube Stream is set as STARTUP STREAM")
-elif STREAM.startswith("https://t.me/YTPlayListData"):
+elif STREAM.startswith("https://t.me/DumpPlaylist"):
     try:
         msg_id=STREAM.split("/", 4)[4]
         finalurl=int(msg_id)
@@ -42,7 +52,8 @@ else:
 class Config:
     #Telegram API Stuffs
     ADMIN = os.environ.get("ADMINS", '')
-    ADMINS = [int(admin) for admin in (ADMIN).split()]
+    SUDO = [int(admin) for admin in (ADMIN).split()] # Exclusive for heroku vars configuration.
+    ADMINS = [int(admin) for admin in (ADMIN).split()] #group admins will be appended to this list.
     API_ID = int(os.environ.get("API_ID", ''))
     API_HASH = os.environ.get("API_HASH", "")
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")     
@@ -61,6 +72,17 @@ class Config:
     STREAM_URL=finalurl
     YPLAY=Y_PLAY
     YSTREAM=YSTREAM
+    
+
+    #heroku
+    API_KEY=os.environ.get("HEROKU_API_KEY", None)
+    APP_NAME=os.environ.get("HEROKU_APP_NAME", None)
+    if not API_KEY or \
+       not APP_NAME:
+       HEROKU_APP=None
+    else:
+       HEROKU_APP=heroku3.from_key(API_KEY).apps()[APP_NAME]
+
 
     #Optional Configuration
     SHUFFLE=bool(os.environ.get("SHUFFLE", True))
@@ -75,22 +97,22 @@ class Config:
     if EDIT_TITLE == "NO":
         EDIT_TITLE=None
         LOGGER.warning("Title Editing turned off")
-    
 
     #others
     ADMIN_CACHE=False
     playlist=[]
     msg = {}
-    CONV = {}
     FFMPEG_PROCESSES={}
     GET_FILE={}
+    DATA={}
     STREAM_END={}
     CALL_STATUS=False
     PAUSE=False
+    MUTED=False
     STREAM_LINK=False
+    DUR={}
     HELP="""
 <b>How Can I Play Video?</b>
-
 You have file options.
  1. Play a video from a YouTube link.
     Command: <b>/play</b>
@@ -126,6 +148,16 @@ These are commands to control player.
     Command: <b>/shuffle</b>
  7. Clear the current playlist queue.
     Command: <b>/clearplaylist</b>
+ 8. Seek the video.
+    Command: <b>/seek</b>
+    <i>You can pass number of seconds to be skiped. Example: /seek 10 to skip 10 sec. /seek -10 to rewind 10 sec.
+ 9. Mute the player.
+    Command: <b>/mute</b>
+ 10. Unmute the player.
+    Command : <b>/unmute</b>
+ 11. Shows the playlist.
+    Command: <b>/playlist</b> 
+    <i>Use /player to show with control buttons</i>
 
 <b>How Can I Export My Current Playlist?</b>
  1. Command: <b>/export</b>
@@ -136,9 +168,11 @@ These are commands to control player.
     Command: <b>/update</b> or <b>/restart</b>
  2. Get Logs
     Command: <b>/logs</b>
+ 3. Set / Change heroku config vars.
+    Command: <b>/env</b>
+    <i>Set a new config var or change existing one or delete existing one. Example: /env CHAT=-100120202002 to change(if exist else set as new) CHAT config to -100120202002. If no value is passed, the var will be deleted. Example /env REPLY_MESSAGE= , this will delete the REPLY_MESSAGE var.</i>
 
 <b>How Can I Stream In My Group</b>
-  <i>The source code of this bot is public and can be found at <a href=https://github.com/ZauteKm/VCVideoPlayBot>VCVideoPlayBot.</a>\nYou can deploy your own bot and use in your group.</i>
+  <i>The source code of this bot is public and can be found at <a href=https://github.com/ZauteKm/VCVudeoPlayBot>VCVideoPlayBot.</a>\nYou can deploy your own bot and use in your group.</i>
 
 """
-
