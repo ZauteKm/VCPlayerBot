@@ -12,17 +12,26 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 from pyrogram.handlers import InlineQueryHandler
 from youtubesearchpython import VideosSearch
-from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram import Client, errors
 from config import Config
 from logger import LOGGER
+from pyrogram.types import (
+    InlineQueryResultArticle, 
+    InputTextMessageContent, 
+    InlineKeyboardButton, 
+    InlineKeyboardMarkup
+)
+from pyrogram import (
+    Client, 
+    errors
+)
+
 
 buttons = [
     [
-        InlineKeyboardButton('😀 Make Own Bot', url='https://github.com/ZauteKm/vcVideoPlayer'),
+
+        InlineKeyboardButton('😀 Make Own Bot', url='https://github.com/ZauteKm/vcVideoPlayBot'),
         InlineKeyboardButton('Join Here 📢', url='https://t.me/tgbotsproject'),
     ]
     ]
