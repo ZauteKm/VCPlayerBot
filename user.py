@@ -12,10 +12,11 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pytgcalls import PyTgCalls
 from pyrogram import Client
 from config import Config
-from logger import LOGGER
+from utils import LOGGER
 
 USER = Client(
     Config.SESSION,
@@ -24,5 +25,4 @@ USER = Client(
     plugins=dict(root="userplugins")
     )
 group_call = PyTgCalls(USER, cache_duration=180)
-
 
