@@ -1,10 +1,11 @@
+from .logger import LOGGER
 from config import Config
 import os
 import time
 from threading import Thread
 import sys
 if Config.DATABASE_URI:
-    from database import db
+    from .database import db
 from pyrogram import (
     Client, 
     filters
