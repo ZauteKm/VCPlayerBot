@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) @zautekm
+# Copyright (C) @subinps
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -12,8 +12,7 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from logger import LOGGER
+from utils import LOGGER
 from pyrogram.types import Message
 from config import Config
 from pyrogram import (
