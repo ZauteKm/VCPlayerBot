@@ -193,24 +193,35 @@ class Config:
 __You can play using any of these options__
 
 1. Play a video from a YouTube link.
-   Command: **/play**
-   __You can use this as a reply to a YouTube link or pass link along command. or as a reply to message to search that in YouTube.__
+Command: **/play**
+__You can use this as a reply to a YouTube link or pass link along command. or as a reply to message to search that in YouTube.__
 
 2. Play from a telegram file.
-   Command: **/play**
-   __Reply to a supported media(video and documents or audio file ).__
- Note: __For both the cases /fplay also can be used by admins to play the song immediately without waiting for queue to end.__
+Command: **/play**
+__Reply to a supported media(video and documents or audio file ).__
+Note: __For both the cases /fplay also can be used by admins to play the song immediately without waiting for queue to end.__
+
 3. Play from a YouTube playlist
-   Command: **/yplay**
-   __First get a playlist file from @GetPlaylistBot or @DumpPlaylist and reply to playlist file.__
+Command: **/yplay**
+__First get a playlist file from @GetPlaylistBot or @DumpPlaylist and reply to playlist file.__
 
 4. Live Stream
-   Command: **/stream**
-   __Pass a live stream URL or any direct URL to play it as stream.__
+Command: **/stream**
+__Pass a live stream URL or any direct URL to play it as stream.__
 
 5. Import an old playlist.
-   Command: **/import**
-   __Reply to a previously exported playlist file. __
+Command: **/import**
+__Reply to a previously exported playlist file. __
+
+6. Channel Play
+Command: **/cplay**
+__Use `/cplay channel username or channel id` to play all the files from the given channel.
+By default both video files and documents will be played . You can add or remove the file type using `FILTERS` var. 
+For example , to stream audio, video and document from the channel use `/env FILTERS video document audio` . If you need only audio , you can use `/env FILTERS video audio` and so on.
+To set up the files from a channel as STARTUP_STREAM, so that the files will be automatically added to playlist on startup of bot. use `/env STARTUP_STREAM channel username or channel id`
+
+Note that for public channels you should use username of channels along with '@' and for private channels you should use channel id.
+For private channels , make sure both the bot and USER account is a member of channel.__
 """
     SETTINGS_HELP="""
 **You can easily customize you player as per you needs. The following configurations are available:**
@@ -281,41 +292,41 @@ Setup using `RECORDING_DUMP` config.__
     CONTROL_HELP="""
 __VCPlayer allows you to control your streams easily__
 1. Skip a song.
-    Command: **/skip**
-    __You can pass a number greater than 2 to skip the song in that position.__
+Command: **/skip**
+__You can pass a number greater than 2 to skip the song in that position.__
 
- 2. Pause the player.
-    Command: **/pause**
+2. Pause the player.
+Command: **/pause**
 
- 3. Resume the player.
-    Command: **/resume**
+3. Resume the player.
+Command: **/resume**
 
- 4. Change Volume.
-    Command: **/volume**
-    __Pass the volume in between 1-200.__
+4. Change Volume.
+Command: **/volume**
+__Pass the volume in between 1-200.__
 
- 5. Leave the VC.
-    Command: **/leave**
+5. Leave the VC.
+Command: **/leave**
 
- 6. Shuffle the playlist.
-    Command: **/shuffle**
+6. Shuffle the playlist.
+Command: **/shuffle**
 
- 7. Clear the current playlist queue.
-    Command: **/clearplaylist**
+7. Clear the current playlist queue.
+Command: **/clearplaylist**
 
- 8. Seek the video.
-    Command: **/seek**
-    __You can pass number of seconds to be skipped. Example: /seek 10 to skip 10 sec. /seek -10 to rewind 10 sec.__
+8. Seek the video.
+Command: **/seek**
+__You can pass number of seconds to be skipped. Example: /seek 10 to skip 10 sec. /seek -10 to rewind 10 sec.__
 
- 9. Mute the player.
-    Command: **/mute**
+9. Mute the player.
+Command: **/mute**
 
- 10. Unmute the player.
-    Command : **/unmute**
+10. Unmute the player.
+Command : **/unmute**
 
- 11. Shows the playlist.
-    Command: **/playlist** 
-    __Use /player to show with control buttons__
+11. Shows the playlist.
+Command: **/playlist** 
+__Use /player to show with control buttons__
 """
 
     ADMIN_HELP="""
@@ -342,7 +353,7 @@ __If your player went something gone wrong, you can easily check the logs using 
  
 Command : **/env**
 __Setup your config vars with /env command.__
-__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @zautekm rather than spamming in my PM`__
+__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @subin_works rather than spamming in my PM`__
 __You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __this will delete the existing LOG_GROUP config.
 
 Command: **/config**
@@ -373,7 +384,9 @@ Tip: __You can easily change the CHAT config by adding the user account and bot 
 6. `STARTUP_STREAM` : __This will be streamed on startups and restarts of bot. 
 You can use either any STREAM_URL or a direct link of any video or a Youtube Live link. 
 You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://telegram.dog/DumpPlaylist) or get a PlayList from [PlayList Extract](https://telegram.dog/GetAPlaylistbot). 
-The PlayList link should in form `https://t.me/DumpPlaylist/xxx`.__
+The PlayList link should in form `https://t.me/DumpPlaylist/xxx`
+You can also use the files from a channel as startup stream. For that just use the channel id or channel username of channel as STARTUP_STREAM value.
+For more info on channel play , read help from player section.__
 
 **Recommended Optional Vars**
 
@@ -382,6 +395,8 @@ The PlayList link should in form `https://t.me/DumpPlaylist/xxx`.__
 2. `HEROKU_API_KEY`: __Your heroku api key. Get one from [here](https://dashboard.heroku.com/account/applications/authorizations/new)__
 
 3. `HEROKU_APP_NAME`: __Your heroku app's name.__
+
+4. `FILTERS`: __Filters for channel play file search. Read help about cplay in player section.__
 
 **Other Optional Vars**
 1. `LOG_GROUP` : __Group to send Playlist, if CHAT is a Group__
