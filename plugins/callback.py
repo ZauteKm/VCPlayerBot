@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) @zautekm
+# Copyright (C) @subinps
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from logger import LOGGER
+from utils import LOGGER
 from pyrogram import Client
 from contextlib import suppress
 from config import Config
@@ -70,7 +70,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         admins = await get_admins(Config.CHAT)
         if query.data.startswith("info"):
             me, you = query.data.split("_")
-            text="Join @tgbotsproject"
+            text="Join @subin_works"
             if you == "volume":
                 await query.answer()
                 await query.message.edit_reply_markup(reply_markup=await volume_buttons())
@@ -102,13 +102,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
             elif you == "recdumb":
                 text = "A channel to which all the recordings are forwarded. Make sure The User account is admin over there. Set one using /env or /config."
             await query.answer(text=text, show_alert=True)
+            return
 
 
-        if query.data.startswith("help"):
+        elif query.data.startswith("help"):
             if query.message.chat.type != "private" and query.message.reply_to_message.from_user is None:
                 return await query.answer("I cant help you here, since you are an anonymous admin, message me in private chat.", show_alert=True)
             elif query.message.chat.type != "private" and query.from_user.id != query.message.reply_to_message.from_user.id:
-                return await query.answer("Okda")
+                return await query.answer("Okda", show_alert=True)
             me, nyav = query.data.split("_")
             back=InlineKeyboardMarkup(
                 [
@@ -155,8 +156,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await query.message.edit(Config.RECORDER_HELP, reply_markup=back, disable_web_page_preview=True)
             elif nyav == 'env':
                 await query.message.edit(Config.ENV_HELP, reply_markup=back, disable_web_page_preview=True)
+            return
             
-        if not (query.from_user is None or query.from_user.id in admins):
+        if not query.from_user.id in admins:
             await query.answer(
                 "😒 Played Joji.mp3",
                 show_alert=True
@@ -167,7 +169,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if query.message.chat.type != "private" and query.message.reply_to_message.from_user is None:
                 return await query.answer("You cant use scheduling here, since you are an anonymous admin. Schedule from private chat.", show_alert=True)
             if query.message.chat.type != "private" and query.from_user.id != query.message.reply_to_message.from_user.id:
-                return await query.answer("Okda")
+                return await query.answer("Okda", show_alert=True)
             data = query.data
             today = datetime.datetime.now(IST)
             smonth=today.strftime("%B")
@@ -341,9 +343,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await query.message.delete()
                 await query.message.reply_to_message.delete()
 
-        if query.data == "shuffle":
+        elif query.data == "shuffle":
             if not Config.playlist:
-                await query.answer("Playlist is empty.")
+                await query.answer("Playlist is empty.", show_alert=True)
                 return
             await shuffle_playlist()
             await query.answer("Playlist shuffled.")
@@ -353,7 +355,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data.lower() == "pause":
             if Config.PAUSE:
-                await query.answer("Already Paused")
+                await query.answer("Already Paused", show_alert=True)
             else:
                 await pause()
                 await query.answer("Stream Paused")
@@ -364,7 +366,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         
         elif query.data.lower() == "resume":   
             if not Config.PAUSE:
-                await query.answer("Nothing Paused to resume")
+                await query.answer("Nothing Paused to resume", show_alert=True)
             else:
                 await resume()
                 await query.answer("Redumed the stream")
@@ -373,7 +375,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
           
         elif query.data=="skip": 
             if not Config.playlist:
-                await query.answer("No songs in playlist")
+                await query.answer("No songs in playlist", show_alert=True)
             else:
                 await query.answer("Trying to skip from playlist.")
                 await skip()
@@ -391,27 +393,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data=="replay":
             if not Config.playlist:
-                await query.answer("No songs in playlist")
+                await query.answer("No songs in playlist", show_alert=True)
             else:
                 await query.answer("trying to restart player")
                 await restart_playout()
                 await sleep(1)
             await query.message.edit_reply_markup(reply_markup=await get_buttons())
 
-
-        elif query.data=="help":
-            buttons = [
-                [
-                    InlineKeyboardButton('🌀 Source', url='https://github.com/ZauteKm/VCVideoPlayBot'),
-                    InlineKeyboardButton('Channel 📢', url='https://t.me/TGBotsProJect'),
-                ]
-            ]
-            reply_markup = InlineKeyboardMarkup(buttons)
-            await query.message.edit(
-                Config.HELP,
-                reply_markup=reply_markup
-
-            )
 
         elif query.data.lower() == "mute":
             if Config.MUTED:
@@ -425,7 +413,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data.lower() == 'seek':
             if not Config.CALL_STATUS:
-                return await query.answer("Not Playing anything.")
+                return await query.answer("Not Playing anything.", show_alert=True)
             #if not (Config.playlist or Config.STREAM_LINK):
                 #return await query.answer("Startup stream cant be seeked.", show_alert=True)
             await query.answer("trying to seek.")
@@ -440,7 +428,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data.lower() == 'rewind':
             if not Config.CALL_STATUS:
-                return await query.answer("Not Playing anything.")
+                return await query.answer("Not Playing anything.", show_alert=True)
             #if not (Config.playlist or Config.STREAM_LINK):
                 #return await query.answer("Startup stream cant be seeked.", show_alert=True)
             await query.answer("trying to rewind.")
@@ -469,15 +457,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if you == "main":
                 await query.message.edit_reply_markup(reply_markup=await volume_buttons())
             if you == "add":
-                vol=Config.VOLUME+10
-                if not (1 < vol < 200):
+                if 190 <= Config.VOLUME <=200:
+                    vol=200 
+                else:
+                    vol=Config.VOLUME+10
+                if not (1 <= vol <= 200):
                     return await query.answer("Only 1-200 range accepted.")
                 await volume(vol)
                 Config.VOLUME=vol
                 await query.message.edit_reply_markup(reply_markup=await volume_buttons())
             elif you == "less":
-                vol=Config.VOLUME-10
-                if not (1 < vol < 200):
+                if 1 <= Config.VOLUME <=10:
+                    vol=1
+                else:
+                    vol=Config.VOLUME-10
+                if not (1 <= vol <= 200):
                     return await query.answer("Only 1-200 range accepted.")
                 await volume(vol)
                 Config.VOLUME=vol
@@ -495,9 +489,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 Config.IS_VIDEO = set_config(Config.IS_VIDEO)
                 await query.message.edit_reply_markup(reply_markup=await settings_panel())
                 data=Config.DATA.get('FILE_DATA')
-                if not data.get('dur', 0) or \
-                    data.get('dur') == 0:
+                if not data \
+                    or data.get('dur', 0) == 0:
                     await restart_playout()
+                    return
                 k, reply = await seek_file(0)
                 if k == False:
                     await restart_playout()
@@ -566,19 +561,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 if query.from_user.id in Config.SUDO:
                     await query.message.delete()
                 else:
-                    await query.answer("This can only be used by SUDO users")  
+                    await query.answer("This can only be used by SUDO users", show_alert=True)  
             else:
                 if query.message.chat.type != "private" and query.message.reply_to_message:
                     if query.message.reply_to_message.from_user is None:
                         pass
                     elif query.from_user.id != query.message.reply_to_message.from_user.id:
-                        return await query.answer("Okda")
+                        return await query.answer("Okda", show_alert=True)
                 elif query.from_user.id in Config.ADMINS:
                     pass
                 else:
-                    return await query.answer("Okda")
+                    return await query.answer("Okda", show_alert=True)
                 await query.answer("Menu Closed")
                 await query.message.delete()
         await query.answer()
-
-
