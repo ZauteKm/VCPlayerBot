@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from logger import LOGGER
+from utils import LOGGER
 from config import Config
 from pyrogram import (
     Client, 
@@ -87,3 +87,4 @@ async def recording_title(bot, message):
             await m.edit(f"Succesfully changed recording title to {title}, Now restarting")
             await delete_messages([message])
             config["RECORDING_TITLE"] = title
+
