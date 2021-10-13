@@ -12,20 +12,12 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from logger import LOGGER
+from utils import LOGGER
 try:
    import os
    import heroku3
    from dotenv import load_dotenv
    from ast import literal_eval as is_enabled
-   from pytgcalls.types.input_stream.quality import (
-        HighQualityVideo,
-        HighQualityAudio,
-        MediumQualityAudio,
-        MediumQualityVideo,
-        LowQualityAudio,
-        LowQualityVideo
-    )
 
 except ModuleNotFoundError:
     import os
@@ -56,7 +48,7 @@ class Config:
    
     #Database
     DATABASE_URI=os.environ.get("DATABASE_URI", None)
-    DATABASE_NAME=os.environ.get("DATABASE_NAME", "VCVideoPlayBot")
+    DATABASE_NAME=os.environ.get("DATABASE_NAME", "VCPlayerBot")
 
 
     #heroku
@@ -79,13 +71,15 @@ class Config:
     PORTRAIT=is_enabled(os.environ.get("PORTRAIT", 'False'))
     IS_VIDEO_RECORD=is_enabled(os.environ.get("IS_VIDEO_RECORD", 'True'))
     DEBUG=is_enabled(os.environ.get("DEBUG", 'False'))
+    PTN=is_enabled(os.environ.get("PTN", "False"))
 
     #Quality vars
-    BITRATE=os.environ.get("BITRATE", False)
-    FPS=os.environ.get("FPS", False)
-    CUSTOM_QUALITY=os.environ.get("QUALITY", "HIGH")
+    E_BITRATE=os.environ.get("BITRATE", False)
+    E_FPS=os.environ.get("FPS", False)
+    CUSTOM_QUALITY=os.environ.get("QUALITY", "100")
 
-
+    #Search filters for cplay
+    FILTERS =  [filter.lower() for filter in (os.environ.get("FILTERS", "video document")).split(" ")]
 
 
     #Dont touch these, these are not for configuring player
@@ -105,6 +99,7 @@ class Config:
     CALL_STATUS=False
     YPLAY=False
     YSTREAM=False
+    CPLAY=False
     STREAM_SETUP=False
     LISTEN=False
     STREAM_LINK=False
@@ -141,41 +136,57 @@ class Config:
         REPLY_MESSAGE=None
         REPLY_PM=False
 
-    if BITRATE:
+    if E_BITRATE:
        try:
-          BITRATE=int(BITRATE)
+          BITRATE=int(E_BITRATE)
        except:
           LOGGER.error("Invalid bitrate specified.")
-          BITRATE=False
+          E_BITRATE=False
+          BITRATE=48000
+       if not BITRATE >= 48000:
+          BITRATE=48000
     else:
-       BITRATE=False
+       BITRATE=48000
     
-    if FPS:
+    if E_FPS:
        try:
-          FPS=int(FPS)
+          FPS=int(E_FPS)
        except:
           LOGGER.error("Invalid FPS specified")
-          if BITRATE:
-             FPS=False
-       if not FPS <= 30:
-          FPS=False
+          E_FPS=False
+       if not FPS >= 30:
+          FPS=30
     else:
-       FPS=False
+       FPS=30
+    try:
+       CUSTOM_QUALITY=int(CUSTOM_QUALITY)
+       if CUSTOM_QUALITY > 100:
+          CUSTOM_QUALITY = 100
+          LOGGER.warning("maximum quality allowed is 100, invalid quality specified. Quality set to 100")
+       elif CUSTOM_QUALITY < 10:
+          LOGGER.warning("Minimum Quality allowed is 10., Qulaity set to 10")
+          CUSTOM_QUALITY = 10
+       if  66.9  < CUSTOM_QUALITY < 100:
+          if not E_BITRATE:
+             BITRATE=48000
+       elif 50 < CUSTOM_QUALITY < 66.9:
+          if not E_BITRATE:
+             BITRATE=36000
+       else:
+          if not E_BITRATE:
+             BITRATE=24000
+    except:
+       if CUSTOM_QUALITY.lower() == 'high':
+          CUSTOM_QUALITY=100
+       elif CUSTOM_QUALITY.lower() == 'medium':
+          CUSTOM_QUALITY=66.9
+       elif CUSTOM_QUALITY.lower() == 'low':
+          CUSTOM_QUALITY=50
+       else:
+          LOGGER.warning("Invalid QUALITY specified.Defaulting to High.")
+          CUSTOM_QUALITY=100
 
-    if CUSTOM_QUALITY.lower() == 'high':
-       VIDEO_Q=HighQualityVideo()
-       AUDIO_Q=HighQualityAudio()
-    elif CUSTOM_QUALITY.lower() == 'medium':
-       VIDEO_Q=MediumQualityVideo()
-       AUDIO_Q=MediumQualityAudio()
-    elif CUSTOM_QUALITY.lower() == 'low':
-       VIDEO_Q=LowQualityVideo()
-       AUDIO_Q=LowQualityAudio()
-    else:
-       LOGGER.warning("Invalid QUALITY specified.Defaulting to High.")
-       VIDEO_Q=HighQualityVideo()
-       AUDIO_Q=HighQualityVideo()
-   
+
 
     #help strings 
     PLAY_HELP="""
