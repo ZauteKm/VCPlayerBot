@@ -15,7 +15,7 @@
 from pyrogram.handlers import InlineQueryHandler
 from youtubesearchpython import VideosSearch
 from config import Config
-from logger import LOGGER
+from utils import LOGGER
 from pyrogram.types import (
     InlineQueryResultArticle, 
     InputTextMessageContent, 
@@ -30,7 +30,6 @@ from pyrogram import (
 
 buttons = [
     [
-
         InlineKeyboardButton('😀 Make Own Bot', url='https://github.com/ZauteKm/vcVideoPlayBot'),
         InlineKeyboardButton('Join Here 📢', url='https://t.me/tgbotsproject'),
     ]
@@ -47,7 +46,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy",
-                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>You can't use this bot in your group, for that you have to make your own bot from the [Source Code](https://github.com/ZauteKm/VCVideoPlayBot) below.</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>You can't use this bot in your group, for that you have to make your own bot from the [SOURCE CODE](https://github.com/ZauteKm/VCVideoPlayot) below.</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )
