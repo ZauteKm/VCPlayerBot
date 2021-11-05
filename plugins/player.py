@@ -153,17 +153,29 @@ async def add_to_playlist(_, message: Message):
         nyav = now.strftime("%d-%m-%Y-%H:%M:%S")
         if type in ["video", "audio"]:
             if type == "audio":
-                title=m_video.title
+                if m_video.title is None:
+                    if m_video.file_name is None:
+                        title_ = "Music"
+                    else:
+                        title_ = m_video.file_name
+                else:
+                    title_ = m_video.title
+                if m_video.performer is not None:
+                    title = f"{m_video.performer} - {title_}"
+                else:
+                    title=title_
                 unique = f"{nyav}_{m_video.file_size}_audio"
             else:
                 title=m_video.file_name
                 unique = f"{nyav}_{m_video.file_size}_video"
+                if Config.PTN:
+                    ny = parse(title)
+                    title_ = ny.get("title")
+                    if title_:
+                        title = title_
             file_id=m_video.file_id
-            if Config.PTN:
-                ny = parse(title)
-                title_ = ny.get("title")
-                if title_:
-                    title = title_
+            if title is None:
+                title = 'Music'
             data={1:title, 2:file_id, 3:"telegram", 4:user, 5:unique}
             if message.command[0] == "fplay":
                 pla = [data] + Config.playlist
@@ -459,11 +471,11 @@ async def stream(client, m: Message):
         
 
 
-admincmds=["yplay", "leave", "pause", "resume", "skip", "restart", "volume", "shuffle", "clearplaylist", "export", "import", "update", 'replay', 'logs', 'stream', 'fplay', 'schedule', 'record', 'slist', 'cancel', 'cancelall', 'vcpromote', 'vcdemote', 'refresh', 'rtitle', 'seek', 'mute', 'unmute',
+admincmds=["yplay", "leave", "pause", "resume", "skip", "restart", "volume", "shuffle", "clearplaylist", "export", "import", "update", 'replay', 'logs', 'stream', 'fplay', 'schedule', 'record', 'slist', 'cancel', 'cancelall', 'vcpromote', 'vcdemote', 'refresh', 'rtitle', 'seek', 'vcmute', 'unmute',
 f'stream@{Config.BOT_USERNAME}', f'logs@{Config.BOT_USERNAME}', f"replay@{Config.BOT_USERNAME}", f"yplay@{Config.BOT_USERNAME}", f"leave@{Config.BOT_USERNAME}", f"pause@{Config.BOT_USERNAME}", f"resume@{Config.BOT_USERNAME}", f"skip@{Config.BOT_USERNAME}", 
 f"restart@{Config.BOT_USERNAME}", f"volume@{Config.BOT_USERNAME}", f"shuffle@{Config.BOT_USERNAME}", f"clearplaylist@{Config.BOT_USERNAME}", f"export@{Config.BOT_USERNAME}", f"import@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}",
 f'play@{Config.BOT_USERNAME}', f'schedule@{Config.BOT_USERNAME}', f'record@{Config.BOT_USERNAME}', f'slist@{Config.BOT_USERNAME}', f'cancel@{Config.BOT_USERNAME}', f'cancelall@{Config.BOT_USERNAME}', f'vcpromote@{Config.BOT_USERNAME}', 
-f'vcdemote@{Config.BOT_USERNAME}', f'refresh@{Config.BOT_USERNAME}', f'rtitle@{Config.BOT_USERNAME}', f'seek@{Config.BOT_USERNAME}', f'mute@{Config.BOT_USERNAME}', f'unmute@{Config.BOT_USERNAME}'
+f'vcdemote@{Config.BOT_USERNAME}', f'refresh@{Config.BOT_USERNAME}', f'rtitle@{Config.BOT_USERNAME}', f'seek@{Config.BOT_USERNAME}', f'mute@{Config.BOT_USERNAME}', f'vcunmute@{Config.BOT_USERNAME}'
 ]
 
 allcmd = ["play", "player", f"play@{Config.BOT_USERNAME}", f"player@{Config.BOT_USERNAME}"] + admincmds
@@ -489,9 +501,8 @@ async def not_chat(_, m: Message):
     else:
         buttons = [
             [
-                InlineKeyboardButton('⚡️Make Own Bot', url='https://github.com/ZauteKm/vcVideoPlaybot'),
-            InlineKeyboardButton('🧩 Join Here', url='https://t.me/tgbotsproject'),
-        ]
-        ]
-    await m.reply("<b>You can't use this bot in this group, for that you have to make your own bot from the [Source Code](https://github.com/Zautekm/VCVideoPlayBot) below.</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
-
+                InlineKeyboardButton('⚡️Make Own Bot', url='https://github.com/ZauteKm/VCPlayerBot'),
+                InlineKeyboardButton('🧩 Join Here', url='https://t.me/JosProjects'),
+            ]
+            ]
+        await m.reply("<b>You can't use this bot in this group, for that you have to make your own bot from the [SOURCE CODE](https://github.com/ZauteKm/VCPlayerBot) below.</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
