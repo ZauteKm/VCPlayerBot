@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) @zautekm
+# Copyright (C) @subinps
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -120,16 +120,28 @@ async def schedule_vc(bot, message):
         nyav = now.strftime("%d-%m-%Y-%H:%M:%S")
         if type in ["video", "audio"]:
             if type == "audio":
-                title=m_video.title
+                if m_video.title is None:
+                    if m_video.file_name is None:
+                        title_ = "Music"
+                    else:
+                        title_ = m_video.file_name
+                else:
+                    title_ = m_video.title
+                if m_video.performer is not None:
+                    title = f"{m_video.performer} - {title_}"
+                else:
+                    title=title_
                 unique = f"{nyav}_{m_video.file_size}_audio"
             else:
                 title=m_video.file_name
                 unique = f"{nyav}_{m_video.file_size}_video"
-            if Config.PTN:
-                ny = parse(title)
-                title_ = ny.get("title")
-                if title_:
-                    title = title_
+                if Config.PTN:
+                    ny = parse(title)
+                    title_ = ny.get("title")
+                    if title_:
+                        title = title_
+            if title is None:
+                title = 'Music'
             data={'1':title, '2':m_video.file_id, '3':"telegram", '4':user, '5':unique}
             sid=f"{message.chat.id}_{msg.message_id}"
             Config.SCHEDULED_STREAM[sid] = data
