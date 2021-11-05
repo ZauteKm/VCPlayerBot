@@ -9,7 +9,7 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
 COPY requirements.txt /requirements.txt
 RUN cd /
 RUN pip3 install -U -r requirements.txt
-RUN mkdir /VCVideoPlayBot
-WORKDIR /VCVideoPlayBot
+RUN mkdir /VCPlayerBot
+WORKDIR /VCPlayerBot
 COPY start.sh /start.sh
 CMD ["/bin/bash", "/start.sh"]
