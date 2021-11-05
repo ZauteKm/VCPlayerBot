@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) @subinps
+# Copyright (C) @ZauteKm
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -129,12 +129,12 @@ async def start(client, message):
         return
     buttons = [
         [
-            InlineKeyboardButton('🌀 Source', url='https://github.com/ZauteKm/VCVideoPlayBot'),
-            InlineKeyboardButton('Channel 📢', url='https://t.me/TGBotsProJect')
+            InlineKeyboardButton('⚠️ Channel', url='https://t.me/JosProjects'),
+            InlineKeyboardButton('Source ⚠️', url='https://github.com/ZauteKm/VCPlayerBot')
         ],
         [
-            InlineKeyboardButton('👨🏼‍🦯 Help', callback_data='help_main'),
-            InlineKeyboardButton('Close 🗑', callback_data='close'),
+            InlineKeyboardButton('🧑‍🚒 Help', callback_data='help_main'),
+            InlineKeyboardButton('Close ❌', callback_data='close'),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -188,14 +188,15 @@ async def show_help(client, message):
 async def repo_(client, message):
     buttons = [
         [
-            InlineKeyboardButton('🌀 Repository', url='https://github.com/ZauteKm/VCVideoPlayBot'),
-            InlineKeyboardButton('⚙️ Update Channel', url='https://t.me/TGBotsProJect'),     
+            InlineKeyboardButton('⚠️ Repository', url='https://github.com/ZauteKm/VCPlayerBot'),
+            InlineKeyboardButton('Channel ⚠️', url='https://t.me/JosProjects'),     
         ],
         [
-            InlineKeyboardButton('🗑 Close', callback_data='close'),
+            InlineKeyboardButton("👮‍♂️ Dev", url='https://t.me/ZauteKm'),
+            InlineKeyboardButton('Close ❌', callback_data='close'),
         ]
     ]
-    await message.reply("<b>The source code of this bot is public and can be found at <a href=https://github.com/subinps/VCPlayerBot>VCPlayerBot.</a>\nYou can deploy your own bot and use in your group.\n\nFeel free to star☀️ the repo if you liked it 🙃.</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+    await message.reply("<b>The source code of this bot is public and can be found at <a href=https://github.com/ZauteKm/VCPlayerBot>VCPlayerBot.</a>\nYou can deploy your own bot and use in your group.\n\nFeel free to star☀️ the repo if you liked it 🙃.</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
     await delete_messages([message])
 
 @Client.on_message(filters.command(['restart', 'update', f"restart@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
@@ -240,11 +241,27 @@ async def set_heroku_var(client, message):
         m = await message.reply("Checking config vars..")
         if " " in message.text:
             cmd, env = message.text.split(" ", 1)
-            if  not "=" in env:
-                await m.edit("You should specify the value for env.\nExample: /env CHAT=-100213658211")
-                await delete_messages([message, m])
-                return
-            var, value = env.split("=", 1)
+            if "=" in env:
+                var, value = env.split("=", 1)
+            else:
+                if env == "STARTUP_STREAM":
+                    env_ = "STREAM_URL"
+                elif env == "QUALITY":
+                    env_ = "CUSTOM_QUALITY" 
+                else:
+                    env_ = env
+                ENV_VARS = ["ADMINS", "SUDO", "CHAT", "LOG_GROUP", "STREAM_URL", "SHUFFLE", "ADMIN_ONLY", "REPLY_MESSAGE", 
+                        "EDIT_TITLE", "RECORDING_DUMP", "RECORDING_TITLE", "IS_VIDEO", "IS_LOOP", "DELAY", "PORTRAIT", 
+                        "IS_VIDEO_RECORD", "PTN", "CUSTOM_QUALITY"]
+                if env_ in ENV_VARS:
+                    await m.edit(f"Current Value for `{env}`  is `{getattr(Config, env_)}`")
+                    await delete_messages([message])
+                    return
+                else:
+                    await m.edit("This is an invalid env value. Read help on env to know about available env vars.")
+                    await delete_messages([message, m])
+                    return     
+            
         else:
             await m.edit("You haven't provided any value for env, you should follow the correct format.\nExample: <code>/env CHAT=-1020202020202</code> to change or set CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
             await delete_messages([message, m])
