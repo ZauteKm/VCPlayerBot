@@ -81,7 +81,7 @@
 <details><summary><b>Deploy to Heroku</b></summary>
 <p>
 <br>
-<a href="https://heroku.com/deploy?template=https://github.com/ZauteKm/vcVideoPlayBot">
+<a href="https://heroku.com/deploy?template=https://github.com/ZauteKm/VCPlayerBot">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 </p>
@@ -92,7 +92,7 @@
 <br/>
 
 <p align="left">
-<a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FZauteKm%2FVCVideoPlayBot"
+<a href="https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FZauteKm%2FVCPlayerBot"
 ">
      <img height="30px" src="https://railway.app/button.svg">
   </a>
@@ -108,8 +108,8 @@
 <br/>
 
 ```sh
-$ git clone https://github.com/ZauteKm/VCVideoPlayBot.git
-$ cd VCVideoPlayBot
+$ git clone https://github.com/ZauteKm/VCPlayerBot.git
+$ cd VCPlayerBot
 $ sudo apt-get install python3-pip ffmpeg
 $ pip3 install -U pip
 $ pip3 install -U -r requirements.txt
